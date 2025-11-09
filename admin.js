@@ -91,7 +91,7 @@ onAuthStateChanged(auth, async (user) => {
     if (data.role !== "admin") {
       alert("Access denied — admin only.");
       await signOut(auth);
-      window.location.href = "dashboard.html";
+      window.location.href = "affilate-signup.html";
       return;
     }
 
