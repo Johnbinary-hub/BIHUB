@@ -255,19 +255,8 @@
   }
 </script>
 
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const refCode = localStorage.getItem("refCode");
-    if (refCode) {
-      console.log("Referral code detected:", refCode);
-      // Optional: show a small banner
-      const banner = document.createElement("div");
-      banner.textContent = `You were referred by code: ${refCode}`;
-      banner.style = "background:#e0f2fe;padding:10px;text-align:center;color:#0f172a;font-weight:600;";
-      document.body.prepend(banner);
-    }
-  });
-</script>
+
+
 
 </body>
 </html>
