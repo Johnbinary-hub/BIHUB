@@ -1,0 +1,141 @@
+:root {
+  --aqua: #00ffff;
+  --black: #000;
+  --gray: #777;
+  --white: #fff;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f4fafa;
+  color: var(--black);
+}
+
+.topbar {
+  background: var(--black);
+  color: var(--aqua);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar h1 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.logout-btn {
+  background: var(--aqua);
+  color: var(--black);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background: #00e6e6;
+}
+
+.container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 16px;
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+}
+
+.subtitle {
+  color: var(--gray);
+  margin-bottom: 20px;
+}
+
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.request-item {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.request-item:hover {
+  background: #f0ffff;
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.request-title {
+  font-weight: 600;
+  color: var(--black);
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+.status-pending {
+  background: #ffeb3b;
+  color: #000;
+}
+
+.status-approved {
+  background: #4caf50;
+  color: #fff;
+}
+
+.status-paid {
+  background: #2196f3;
+  color: #fff;
+}
+
+.request-details {
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+.loading-text {
+  text-align: center;
+  color: var(--gray);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 15px;
+  }
+  .request-item {
+    font-size: 0.9rem;
+  }
+}

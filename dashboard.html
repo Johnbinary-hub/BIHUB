@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bi-Hub Partner Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script type="module" src="dashboard.js" defer></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="logo">Bi-Hub <span>Partner</span></h2>
+      <nav class="nav-menu">
+        <a href="#" class="active">Dashboard</a>
+        <a href="#">Referrals</a>
+        <a href="#">Earnings</a>
+        <a href="#">Settings</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <div></div>
+        <div class="user-info">
+          <span id="userName">Loading...</span>
+          <small id="userRef">REF...</small>
+          <div class="avatar" id="userAvatar">U</div>
+        </div>
+      </header>
+
+      <section class="welcome-section">
+        <h1 id="welcomeText">Welcome back!</h1>
+        <p>Here's your referral performance overview</p>
+
+        <div class="stats-grid">
+          <div class="card">
+            <h3 id="totalReferrals">0</h3>
+            <p>Total Referrals</p>
+          </div>
+          <div class="card">
+            <h3 id="successfulConversions">0</h3>
+            <p>Successful Conversions</p>
+          </div>
+          <div class="card">
+            <h3 id="commissionEarned">$0</h3>
+            <p>Commission Earned</p>
+          </div>
+          <div class="card">
+            <h3 id="pendingPayouts">$0</h3>
+            <p>Pending Payouts</p>
+          </div>
+          <div class="card">
+  <h3 id="walletBalance">₦0.00</h3>
+  <p>Wallet Balance</p>
+</div>
+        </div>
+
+        <div class="referral-link-box">
+          <label>Your Referral Link</label>
+          <div class="referral-input">
+            <input type="text" id="refLink" readonly />
+            <button onclick="copyLink()">Copy</button>
+          </div>
+          <div class="button-group">
+            <button class="btn-primary" id="withdrawBtn">Withdraw Now</button>
+            <button class="btn-secondary">Monthly Payout</button>
+          </div>
+        </div>
+
+        <div class="recent-referrals">
+          <h2>Recent Referrals</h2>
+          <div id="referralsList">
+            <p style="color:gray;">No referrals yet...</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+</body>
+</html>

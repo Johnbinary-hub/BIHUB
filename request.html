@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request a Service | BI-HUB</title>
+  <link rel="stylesheet" href="request.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Loader -->
+
+
+  <!-- HEADER -->
+  <header class="glow-header">
+    <div class="logo">BI<span>HUB</span></div>
+    <nav class="nav-link">
+      <a href="index-dash.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- REQUEST SECTION -->
+  <section class="request-section">
+    <h2>Request a Service</h2>
+    <p class="subtitle">Tell us about your project and we’ll create a custom solution for you</p>
+
+    <form id="requestForm" class="request-form">
+      <div class="form-group">
+        <div class="input-box">
+          <label>Full Name *</label>
+          <input type="text" name="clientName" placeholder="John Doe" required>
+        </div>
+        <div class="input-box">
+          <label>Email *</label>
+          <input type="email" name="clientEmail" placeholder="john@example.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-box">
+          <label>Phone Number *</label>
+          <input type="tel" name="clientPhone" placeholder="Whatsapp number preferred" required>
+        </div>
+        <div class="input-box">
+          <label>Company Name</label>
+          <input type="text" name="companyName" placeholder="Your Company">
+        </div>
+      </div>
+
+      <div class="input-box">
+        <label>Service Type *</label>
+        <select name="package" required>
+          <option value="">Select a service</option>
+          <option>Web Development</option>
+          <option>Graphic Design</option>
+          <option>Cybersecurity</option>
+          <option>App Development</option>
+          <option>Others</option>
+        </select>
+      </div>
+
+      <div class="input-box">
+        <label>Project Description *</label>
+        <textarea name="description" placeholder="Please describe your project in detail and add your price range if it is not included in the dropdown" required></textarea>
+      </div>
+
+      <div class="input-box">
+        <label>Budget Range</label>
+        <select name="budget">
+          <option value="">Select budget range</option>
+          <option>100K - 200K</option>
+          <option>200K - 400K</option>
+          <option>400K - 600K</option>
+          <option>600K+</option>
+          <option>Others</option>
+        </select>
+      </div>
+
+      <div class="input-box">
+        <label>Preferred Meeting Date</label>
+        <input type="date" name="meetingDate">
+      </div>
+
+      <div class="upload-box">
+        <p><i class="fa-solid fa-upload"></i></p>
+        <p>Click to upload or drag and drop</p>
+        <small>PDF, DOC, images up to 10MB</small>
+        <input type="file" id="fileUpload" name="attachment">
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Request</button>
+
+      <p class="info-note">
+        We’ll review your request and send you a detailed proposal within 24–48 hours.
+      </p>
+    </form>
+  </section>
+
+  <!-- 🔒 AUTH MODAL -->
+  <div id="authModal" class="auth-modal hidden">
+    <div class="auth-box">
+      <h3 id="authTitle">Login to Continue</h3>
+      <form id="authForm">
+        <div id="authExtraFields" class="hidden">
+          <div class="input-box">
+            <label>Full Name</label>
+            <input type="text" id="signupName" />
+          </div>
+          <div class="input-box">
+            <label>Company Name</label>
+            <input type="text" id="signupCompany" />
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label>Email</label>
+          <input type="email" id="authEmail" required />
+        </div>
+        <div class="input-box">
+          <label>Password</label>
+          <input type="password" id="authPassword" required minlength="6" />
+        </div>
+
+        <button type="submit" class="btn" id="authBtn">Login</button>
+
+        <p id="switchAuth">
+          Don't have an account?
+          <a href="#" id="toggleAuth">Sign Up</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <div class="footer-logo">BI<span>HUB</span></div>
+        <p>Transforming digital visions into reality with cutting-edge design and technology solutions.</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="#">Get Started</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Web Development</a></li>
+          <li><a href="#">Graphic Design</a></li>
+          <li><a href="#">Cybersecurity</a></li>
+          <li><a href="#">App Development</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-social">
+        <h4>Connect With Us</h4>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 BI-HUB Design. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Firebase referral logic -->
+  <script type="module" src="request.js"></script>
+  <script>
+  // Hide loader once the page is ready
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    setTimeout(() => loader.classList.add("hidden"), 500);
+  });
+
+  // Function to show loader before navigating
+  function navigateWithLoader(url) {
+    const loader = document.getElementById("loader");
+    loader.classList.remove("hidden");
+    setTimeout(() => {
+      window.location.href = url;
+    }, 800); // Loader visible before page change
+  }
+</script>
+
+</body>
+</html>

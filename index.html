@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting...</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f6f8fb;
+      color: #1e3a8a;
+      text-align: center;
+    }
+    .loading { font-size: 18px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Redirecting you to Bi-Hub...</h2>
+  <p class="loading">Please wait...</p>
+
+  <script>
+    // Extract the referral code from the URL
+    const path = window.location.pathname.split("/");
+    const refCode = path[path.length - 1];
+
+    if (refCode) {
+      // Save to localStorage for use in index.html or signup later
+      localStorage.setItem("refCode", refCode);
+
+      // Redirect to main website after 1 second
+      setTimeout(() => {
+        window.location.href = "/index.html";
+      }, 1000);
+    } else {
+      document.body.innerHTML = `
+        <h2>Invalid Referral Link</h2>
+        <p>Please check your referral URL and try again.</p>
+        <a href="/index.html">Go to Homepage</a>
+      `;
+    }
+  </script>
+</body>
+</html>

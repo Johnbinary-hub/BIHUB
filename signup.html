@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | BI-HUB</title>
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+  
+  <div class="auth-container">
+    <h2>Create Your Account</h2>
+    <form id="signupForm">
+      <div class="input-box">
+        <label>Full Name *</label>
+        <input type="text" id="name" required />
+      </div>
+      <div class="input-box">
+        <label>Company Name</label>
+        <input type="text" id="company" />
+      </div>
+      <div class="input-box">
+        <label>Email *</label>
+        <input type="email" id="email" required />
+      </div>
+      <div class="input-box">
+        <label>Phone Number *</label>
+        <input type="tel" id="phone" required />
+      </div>
+      <div class="input-box">
+        <label>Address</label>
+        <input type="text" id="address" />
+      </div>
+      <div class="input-box">
+        <label>How did you hear about us?</label>
+        <input type="text" id="heardFrom" placeholder="Friend, social media, ad..." />
+      </div>
+      <div class="input-box">
+        <label>Referral Code (optional)</label>
+        <input type="text" id="referralCode" placeholder="Auto-filled if link was shared" />
+      </div>
+      <div class="input-box">
+        <label>Password *</label>
+        <input type="password" id="password" required minlength="6" />
+      </div>
+
+      <button type="submit" class="btn">Sign Up</button>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </form>
+  </div>
+
+  <script type="module" src="signup.js"></script>
+</body>
+</html>

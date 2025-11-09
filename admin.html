@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bi-Hub — Admin Dashboard</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="brand">Bi-Hub <span>Admin</span></div>
+      <nav>
+        <button class="nav-btn active" data-view="overview">Overview</button>
+        <button class="nav-btn" data-view="users">Users</button>
+        <button class="nav-btn" data-view="referrals">Referrals</button>
+        <button class="nav-btn" data-view="requests" onclick="window.location.href='admin-request.html'">Requests</button>
+        <button class="nav-btn" data-view="settings">Settings</button>
+        <button id="logoutBtn" class="nav-btn danger">Logout</button>
+      </nav>
+      <div class="admin-footer">Signed in as <span id="adminName">—</span></div>
+    </aside>
+
+    <!-- Main Area -->
+    <main class="admin-main">
+      <header class="admin-top">
+        <h1 id="pageTitle">Overview</h1>
+        <div class="top-actions">
+          <input id="globalSearch" placeholder="Search users or referrals..." />
+          <button id="exportAll" class="btn">Export All CSV</button>
+        </div>
+      </header>
+
+      <!-- OVERVIEW -->
+      <section class="view" id="overviewView">
+        <div class="cards-grid">
+          <div class="card">
+            <h3 id="totalPartners">0</h3>
+            <p>Total Partners</p>
+          </div>
+          <div class="card">
+            <h3 id="totalReferrals">0</h3>
+            <p>Total Referrals</p>
+          </div>
+          <div class="card">
+            <h3 id="convertedReferrals">0</h3>
+            <p>Converted</p>
+          </div>
+          <div class="card">
+            <h3 id="pendingPayouts">₦0</h3>
+            <p>Pending Payouts</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Recent Referrals</h2>
+          <div id="recentReferrals" class="table-wrap">Loading...</div>
+        </div>
+      </section>
+
+      <!-- USERS -->
+      <section class="view hidden" id="usersView">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Users</h2>
+            <button id="exportUsers" class="btn">Export Users CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table id="usersTable">
+              <thead>
+                <tr>
+              <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Referral Code</th>
+            <th>Referrals</th>
+            <th>Wallet</th>
+            <th>Joined</th>
+
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REFERRALS -->
+      <section class="view hidden" id="referralsView">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Referrals</h2>
+            <div>
+              <select id="statusFilter">
+                <option value="">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="approved">Approved</option>
+              </select>
+              <button id="exportReferrals" class="btn">Export Referrals CSV</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table id="referralsTable">
+              <thead>
+                <tr>
+                  <th>Referred By</th>
+                  <th>Client</th>
+                  <th>Package</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REQUESTS -->
+      <section class="view hidden" id="requestsView">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Service Requests</h2>
+            <button id="exportRequests" class="btn">Export Requests CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table id="requestsTable">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Service</th>
+                  <th>Budget</th>
+                  <th>Status</th>
+                  <th>Submitted</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view hidden" id="settingsView">
+        <div class="panel">
+          <h2>Settings</h2>
+          <div class="setting-row">
+            <label>Default Referral Redirect Target</label>
+            <input id="redirectTarget" placeholder="https://bi-hub.com/affiliate-signup.html" />
+            <button id="saveRedirect" class="btn">Save</button>
+          </div>
+          <div class="setting-row">
+            <label>Clear Cached Referrals (Local)</label>
+            <button id="clearCache" class="btn ghost">Clear</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

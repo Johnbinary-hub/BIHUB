@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Progress</title>
+  <link rel="stylesheet" href="progress.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>Service Progress</h1>
+    <button id="logoutBtn" class="logout-btn">Logout</button>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Your Requests</h2>
+      <p class="subtitle">Track the progress of all your service requests.</p>
+
+      <div id="requestsList" class="requests-list">
+        <p class="loading-text">Fetching your service requests...</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="progress.js"></script>
+</body>
+</html>

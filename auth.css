@@ -1,0 +1,76 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.auth-container {
+  background: #0a0a0a;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+h2 {
+  text-align: center;
+  color: #00ffff;
+  margin-bottom: 1.5rem;
+}
+
+.input-box {
+  margin-bottom: 1rem;
+}
+
+.input-box label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-box input:focus {
+  box-shadow: 0 0 8px #00ffff;
+}
+
+.btn {
+  width: 100%;
+  background: #00ffff;
+  color: #000;
+  border: none;
+  padding: 0.9rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #00d9d9;
+}
+
+p {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+p a {
+  color: #00ffff;
+  text-decoration: none;
+}

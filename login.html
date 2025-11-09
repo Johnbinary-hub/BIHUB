@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Request Service</title>
+  <link rel="stylesheet" href="login.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+  <!-- Loader -->
+<div id="loader">
+  <img src="logo.png" alt="BI-HUB Logo" class="loader-logo" />
+</div>
+
+  <div class="container">
+    <form id="loginForm" class="card">
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Log in to continue</p>
+
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required />
+
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required />
+
+      <button type="submit" id="loginBtn" class="btn">Login</button>
+
+      <div class="google-btn" id="googleLogin">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
+        <span>Sign in with Google</span>
+      </div>
+
+      <p id="status" class="status"></p>
+
+      <p class="switch-text">
+        Don’t have an account? <a href="signup01.html">Sign up</a>
+      </p>
+    </form>
+  </div>
+
+  <script src="login.js"></script>
+  <script>
+  // Hide loader once the page is ready
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    setTimeout(() => loader.classList.add("hidden"), 500);
+  });
+
+  // Function to show loader before navigating
+  function navigateWithLoader(url) {
+    const loader = document.getElementById("loader");
+    loader.classList.remove("hidden");
+    setTimeout(() => {
+      window.location.href = url;
+    }, 800); // Loader visible before page change
+  }
+</script>
+
+</body>
+</html>

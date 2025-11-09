@@ -1,0 +1,283 @@
+:root {
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #1e3a8a;
+  --danger: #d23a2b;
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-size: 14px;
+  color-scheme: light;
+  color: #0f1724;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+}
+
+/* ────────────────────────────────
+   Layout + Sidebar
+──────────────────────────────── */
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  width: 220px;
+  background: linear-gradient(180deg, var(--accent), #16305f);
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.brand span {
+  color: #9ecbff;
+  font-weight: 700;
+}
+
+.admin-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 0;
+  color: #e6eefc;
+  padding: 10px 12px;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn.active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-btn.danger {
+  margin-top: auto;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffd6d6;
+}
+
+.admin-footer {
+  font-size: 13px;
+  color: #dbeafe;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
+}
+
+/* ────────────────────────────────
+   Main Content
+──────────────────────────────── */
+.admin-main {
+  flex: 1;
+  padding: 22px 28px;
+  overflow-x: hidden;
+}
+
+.admin-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.top-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.top-actions input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e6eefc;
+  width: 260px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #274bc0;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(30, 58, 138, 0.2);
+}
+
+/* ────────────────────────────────
+   Cards + Panels
+──────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: var(--card);
+  padding: 18px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.card h3 {
+  font-size: 22px;
+  color: var(--accent);
+  margin: 0;
+}
+
+.card p {
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
+/* ────────────────────────────────
+   Panels + Tables
+──────────────────────────────── */
+.panel {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead th {
+  background: #f3f6fb;
+  padding: 10px;
+  text-align: left;
+  font-weight: 700;
+  color: #0f1724;
+  border-bottom: 1px solid #eee;
+}
+
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #f2f4f8;
+  color: #1e293b;
+}
+
+/* Chips / statuses */
+.chip {
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.chip.pending {
+  background: #fff4e6;
+  color: #a75a00;
+  border: 1px solid #ffe8cc;
+}
+
+.chip.converted {
+  background: #ecfdf5;
+  color: #0f5132;
+  border: 1px solid #dcfce7;
+}
+
+.chip.approved {
+  background: #eef2ff;
+  color: #1e3a8a;
+  border: 1px solid #e6edff;
+}
+
+/* ────────────────────────────────
+   Settings
+──────────────────────────────── */
+.setting-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.setting-row input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e6eefc;
+}
+
+/* ────────────────────────────────
+   Responsive
+──────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    display: none;
+  }
+  .admin-main {
+    padding: 12px;
+  }
+  .cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}

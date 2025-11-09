@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign Up — Earn with Bi-Hub</title>
+  <link rel="stylesheet" href="affilate-signup.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="page">
+    <a class="back" href="index.html" id="backHome" aria-label="Back to Home">← Back to Home</a>
+
+    <section class="card-wrap" role="region" aria-labelledby="welcomeTitle">
+      <div class="card">
+        <header class="card-head">
+          <h1 id="welcomeTitle" class="title">Welcome to Bi-Hub</h1>
+          <p class="subtitle">Start earning with our partner program</p>
+          <p class="subtitle"><strong>Please note</strong> you will be contacted via whatsapp for your payment. So add your whatsapp number</p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs" role="tablist" aria-label="Sign up or login">
+          <button class="tab active" role="tab" aria-selected="true" aria-controls="signupPanel" id="signupTab">Sign Up</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="loginPanel" id="loginTab">Login</button>
+        </div>
+
+        <!-- Sign Up Panel -->
+        <div class="panel" id="signupPanel" role="tabpanel" aria-labelledby="signupTab">
+          <form id="signupForm" autocomplete="on" novalidate>
+            <label class="field">
+              <span class="label-text">Full Name</span>
+              <input id="fullName" name="fullName" type="text" placeholder="John Doe" required />
+              <span class="error" id="errName"></span>
+            </label>
+
+            <label class="field">
+              <span class="label-text">Email</span>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required />
+              <span class="error" id="errEmail"></span>
+            </label>
+ <label class="field">
+              <span class="label-text">Phone number</span>
+              <input id="number" name="number" type="number" placeholder="09067578644" required />
+              <span class="error" id="errPhone"></span>
+            </label>
+
+            <div class="row">
+              <label class="field half">
+                <span class="label-text">Password</span>
+                <input id="password" name="password" type="password" placeholder="••••••••" minlength="6" required />
+                <span class="error" id="errPass"></span>
+              </label>
+
+              <label class="field half">
+                <span class="label-text">Confirm Password</span>
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="••••••••" minlength="6" required />
+                <span class="error" id="errConfirm"></span>
+              </label>
+            </div>
+
+            <label class="field">
+              <span class="label-text">Role</span>
+              <select id="role" name="role" required>
+                <option value="">Choose role…</option>
+                <option>Designer</option>
+                <option>Influencer</option>
+                <option>Partner</option>
+                <option>Other</option>
+              </select>
+              <span class="error" id="errRole"></span>
+            </label>
+
+            <button type="submit" class="btn primary" id="createAccount">Create Account</button>
+
+            <div style="text-align:center;margin-top:12px;">
+              <button type="button" class="btn outline" id="googleSignup">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" width="20" style="vertical-align:middle;margin-right:8px;">
+                Continue with Google
+              </button>
+            </div>
+
+            <div class="meta">
+              <p>Already have an account? <button type="button" class="link-btn" id="toLogin">Login</button></p>
+            </div>
+          </form>
+        </div>
+
+        <!-- Login Panel -->
+        <div class="panel hidden" id="loginPanel" role="tabpanel" aria-labelledby="loginTab">
+          <form id="loginForm" novalidate>
+            <label class="field">
+              <span class="label-text">Email</span>
+              <input id="loginEmail" type="email" placeholder="you@example.com" required />
+              <span class="error" id="errLoginEmail"></span>
+            </label>
+
+            <label class="field">
+              <span class="label-text">Password</span>
+              <input id="loginPassword" type="password" placeholder="••••••••" required />
+              <span class="error" id="errLoginPass"></span>
+            </label>
+
+            <button type="submit" class="btn primary">Login</button>
+            <div class="meta">
+              <p>Don't have an account? <button type="button" class="link-btn" id="toSignup">Sign up</button></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast" class="toast"></div>
+  </main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
+
+  <!-- Main Script -->
+  <script type="module" src="affilate-signup.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | Request a Service</title>
+  <link rel="stylesheet" href="signup01.css" />
+</head>
+<body>
+  <!-- Loader -->
+<div id="loader">
+  <img src="logo.png" alt="BI-HUB Logo" class="loader-logo" />
+</div>
+
+  <!-- <header class="topbar">
+    <a href="affiliate.html" class="affiliate-link">
+      Want to join us or earn with us? Click here
+    </a>
+  </header> -->
+
+  <main class="container">
+    <section class="card">
+      <h1>Create Account</h1>
+      <p class="lead">Sign up to request a service </p>
+
+      <form id="signupForm" novalidate>
+        <label>Company Name
+          <input id="companyName" type="text" placeholder="Acme Ltd" required />
+        </label>
+
+        <label>Company Email
+          <input id="companyEmail" type="email" placeholder="info@acme.com" required />
+        </label>
+
+        <label>Phone Number
+          <input id="phone" type="tel" placeholder="+234 801 234 5678" required />
+        </label>
+
+        <div class="referrer-header">
+          <p>Referrer Code (required)</p>
+          <button type="button" id="useDefaultRef">Don’t have one? Use this</button>
+        </div>
+
+        <label>Referrer Code
+          <input id="refCode" type="text" placeholder="e.g. REF1234" required />
+        </label>
+
+        <label>Password
+          <input id="password" type="password" placeholder="Create a password" required minlength="8" />
+        </label>
+
+        <label>Confirm Password
+          <input id="confirmPassword" type="password" placeholder="Confirm password" required minlength="8" />
+        </label>
+
+        <button type="submit" id="submitBtn" class="btn-primary">
+          <span class="btn-text">Create Account</span>
+          <span class="spinner"></span>
+        </button>
+
+        <div class="or-row"><span>or</span></div>
+
+        <button type="button" id="googleBtn" class="btn-google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" />
+          <span>Continue with Google</span>
+        </button>
+
+        <p class="muted">
+          Already have an account? <a href="login.html">Log in</a>
+        </p>
+
+        <p id="status" class="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <script src="signup01.js"></script>
+  <script>
+  // Hide loader once the page is ready
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    setTimeout(() => loader.classList.add("hidden"), 500);
+  });
+
+  // Function to show loader before navigating
+  function navigateWithLoader(url) {
+    const loader = document.getElementById("loader");
+    loader.classList.remove("hidden");
+    setTimeout(() => {
+      window.location.href = url;
+    }, 800); // Loader visible before page change
+  }
+</script>
+
+</body>
+</html>
