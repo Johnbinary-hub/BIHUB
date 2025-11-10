@@ -15,9 +15,11 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  setDoc,
   query,
   orderBy,
-  increment
+  increment,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
 /* ========= Firebase config ========= */
@@ -95,7 +97,9 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
 
+    // Start the main listeners AFTER auth validated
     initAdminListeners();
+    startReferralCountListener();
   } catch (err) {
     console.error("Auth guard error:", err);
     alert("Error verifying admin. Check console.");
@@ -103,7 +107,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 /* -------------------
-   Realtime listeners
+   Realtime listeners (rendering)
 -------------------- */
 function initAdminListeners() {
   onSnapshot(collection(db, "users"), (snap) => {
@@ -117,109 +121,108 @@ function initAdminListeners() {
     computeTotals();
   });
 }
-/* ✅ Real-time listener: auto-credit referrer when a new referral request is created */
-onSnapshot(collection(db, "referrals"), async (snap) => {
-  snap.docChanges().forEach(async (change) => {
-    if (change.type === "added") {
-      const ref = change.doc.data();
 
-      // Only process if this referral has a refCode (i.e., came from a referrer)
-      if (ref.refCode) {
-        const usersSnap = await getDocs(collection(db, "users"));
-        const refUser = usersSnap.docs.find(
-          (u) => u.data().referralCode === ref.refCode
-        );
+/* -------------------
+   Safe referral count listener
+   - Ensures each referral is counted only once
+   - Uses runTransaction + a single update to mark referral counted
+   - Does not credit wallet (wallet credit only in markAsPaid)
+-------------------- */
+function startReferralCountListener() {
+  // Listen to referrals collection changes (added)
+  onSnapshot(collection(db, "referrals"), async (snap) => {
+    snap.docChanges().forEach(async (change) => {
+      if (change.type !== "added") return;
 
-        if (refUser) {
-          const uRef = doc(db, "users", refUser.id);
+      const referralDocId = change.doc.id;
+      const refData = change.doc.data();
 
-          /* ------------------------------
-             💰 Calculate 20% commission
-          ------------------------------ */
-          let commission = 0;
+      // Quickly ignore if no refCode
+      if (!refData || !refData.refCode) return;
 
-          // try to estimate from "budget" or "package"
-          if (ref.budget) {
-            const budgetText = ref.budget.toLowerCase();
-            const match = budgetText.match(/\d+/g);
-            if (match) {
-              const lastValue = parseInt(match.pop()) * 1000;
-              commission = lastValue * 0.2;
-            }
+      try {
+        // Use a transaction to avoid race conditions between multiple listeners
+        await runTransaction(db, async (tx) => {
+          const refDocRef = doc(db, "referrals", referralDocId);
+          const refSnap = await tx.get(refDocRef);
+
+          if (!refSnap.exists()) return; // nothing to do
+          const r = refSnap.data();
+
+          // If already counted, exit
+          if (r.counted) return;
+
+          // find referrer user document (by referralCode)
+          // Note: transactions can't perform complex queries reliably across docs/files,
+          // so we perform a read outside transaction to find the target user docRef,
+          // then do tx.get + tx.update to ensure atomicity of the two updates.
+          const usersSnap = await getDocs(collection(db, "users"));
+          const refUserDoc = usersSnap.docs.find(u => u.data().referralCode === r.refCode);
+
+          if (!refUserDoc) {
+            console.warn(`Referral count: no user found for code=${r.refCode}`);
+            // still mark counted to avoid repeated attempts, optionally:
+            // await tx.update(refDocRef, { counted: true });
+            return;
           }
 
-          // fallback: flat rate for known packages
-          if (!commission && ref.package) {
-            const packagePrices = {
-              "Web Development": 200000,
-              "Graphic Design": 150000,
-              "Cybersecurity": 300000,
-              "App Development": 250000,
-            };
-            const basePrice = packagePrices[ref.package] || 100000;
-            commission = basePrice * 0.2;
-          }
+          const userDocRef = doc(db, "users", refUserDoc.id);
 
-          /* ------------------------------
-             ✅ Update referrer's account
-          ------------------------------ */
-          await updateDoc(uRef, {
-            referralCount: increment(1),
-            walletBalance: increment(commission),
-          });
+          // Re-get the referral doc inside the transaction to be safe
+          const recheckRef = await tx.get(refDocRef);
+          if (!recheckRef.exists()) return;
+          const recheckData = recheckRef.data();
+          if (recheckData.counted) return; // someone else already counted
 
-          console.log(
-            `✅ Referrer ${refUser.data().name} credited ₦${commission.toFixed(
-              2
-            )} (20%)`
-          );
+          // Update user referralCount and mark referral as counted
+          tx.update(userDocRef, { referralCount: increment(1) });
+          tx.update(refDocRef, { counted: true });
+
+          // transaction returns, commit will apply both updates atomically
+        });
+
+        // Optional UI feedback: push a small item at top of recentReferrals
+        const recentPanel = document.getElementById("recentReferrals");
+        if (recentPanel && refData.referrerName) {
+          const n = document.createElement("div");
+          n.className = "referral-item";
+          n.innerHTML = `
+            <div>
+              <strong>${escapeHtml(refData.referrerName || refData.refCode)}</strong>
+              <div style="font-size:13px;color:var(--muted)">Referral counted (${new Date().toLocaleTimeString()})</div>
+            </div>
+          `;
+          recentPanel.prepend(n);
         }
-      }
-    }
-  });
-});
 
-
-/* ✅ Add this outside the function */
-onSnapshot(collection(db, "referrals"), async (snap) => {
-  snap.docChanges().forEach(async (change) => {
-    if (change.type === "added") {
-      const ref = change.doc.data();
-      if (ref.refCode) {
-        const usersSnap = await getDocs(collection(db, "users"));
-        const refUser = usersSnap.docs.find(u => u.data().referralCode === ref.refCode);
-        if (refUser) {
-          const uRef = doc(db, "users", refUser.id);
-          await updateDoc(uRef, {
-            referralCount: increment(1)
-          });
-          console.log(`✅ Referrer ${refUser.data().name} count incremented`);
-        }
+        console.log(`Referral counted for code=${refData.refCode} (doc=${referralDocId})`);
+      } catch (err) {
+        console.error("Error counting referral (transaction):", err);
       }
-    }
+    });
   });
-});
+}
 
 /* -------------------
    Render tables
 -------------------- */
 function renderUsersTable(users) {
   const tbody = document.querySelector("#usersTable tbody");
+  if (!tbody) return;
   tbody.innerHTML = "";
   users.forEach(u => {
     const tr = document.createElement("tr");
-   tr.innerHTML = `
-  <td>${escapeHtml(u.name || "")}</td>
-  <td>${escapeHtml(u.email || "")}</td>
-  <td>${escapeHtml(u.phone || "-")}</td>
-  <td>${escapeHtml(u.role || "")}</td>
-  <td>${escapeHtml(u.referralCode || "")}</td>
-  <td>${u.referralCount || 0}</td>
-  <td>₦${(u.walletBalance || 0).toFixed(2)}</td>
-  <td>${u.createdAt ? new Date(u.createdAt.seconds ? u.createdAt.seconds * 1000 : u.createdAt).toLocaleString() : "-"}</td>
-  <td><button class="btn ghost" data-action="view-user" data-id="${u.id}">View</button></td>
-`;
-
+    tr.innerHTML = `
+      <td>${escapeHtml(u.name || "")}</td>
+      <td>${escapeHtml(u.email || "")}</td>
+      <td>${escapeHtml(u.phone || "-")}</td>
+      <td>${escapeHtml(u.role || "")}</td>
+      <td>${escapeHtml(u.referralCode || "")}</td>
+      <td>${u.referralCount || 0}</td>
+      <td>₦${(u.walletBalance || 0).toFixed(2)}</td>
+      <td>${u.createdAt ? new Date(u.createdAt.seconds ? u.createdAt.seconds * 1000 : u.createdAt).toLocaleString() : "-"}</td>
+      <td><button class="btn ghost" data-action="view-user" data-id="${u.id}">View</button></td>
+    `;
     tbody.appendChild(tr);
   });
 
@@ -233,6 +236,7 @@ function renderUsersTable(users) {
 
 function renderReferralsTable(refs) {
   const tbody = document.querySelector("#referralsTable tbody");
+  if (!tbody) return;
   tbody.innerHTML = "";
   const filter = statusFilter?.value || "";
   const search = globalSearch?.value?.toLowerCase?.() || "";
@@ -291,7 +295,7 @@ function renderReferralsTable(refs) {
     btn.addEventListener("click", () => markAsPaid(btn.dataset.id))
   );
 
-  // update recent panel
+  // update recent panel (top 5)
   const recentPanel = document.getElementById("recentReferrals");
   if (recentPanel) {
     const top5 = refs.slice(0, 5);
@@ -336,12 +340,14 @@ async function revokeApproval(refId) {
   }
 }
 
-// 💸 Mark referral as paid & credit referrer
+/* -------------------
+   Mark as Paid & wallet credit (no referralCount increment here)
+-------------------- */
 async function markAsPaid(refId) {
   const amount = parseFloat(prompt("Enter amount paid (₦):"));
   if (isNaN(amount) || amount <= 0) return alert("Invalid amount.");
 
-  const reward = amount * 0.2; // ✅ 20% commission
+  const reward = amount * 0.2; // 20% commission
 
   try {
     const rRef = doc(db, "referrals", refId);
@@ -358,19 +364,16 @@ async function markAsPaid(refId) {
 
     if (refData.refCode) {
       const usersSnap = await getDocs(collection(db, "users"));
-      const refUser = usersSnap.docs.find(u => u.data().referralCode === refData.refCode);
-      if (refUser) {
-        const uRef = doc(db, "users", refUser.id);
+      const refUserDoc = usersSnap.docs.find(u => u.data().referralCode === refData.refCode);
+      if (refUserDoc) {
+        const uRef = doc(db, "users", refUserDoc.id);
 
-        // 🔥 Add both wallet credit + live referral count
+        // ONLY credit wallet here
         await updateDoc(uRef, {
-          walletBalance: increment(reward),
-          referralCount: increment(1)
+          walletBalance: increment(reward)
         });
 
-        console.log(
-          `Referral credited to ${refUser.data().name}: +₦${reward.toFixed(2)}`
-        );
+        console.log(`Referral paid: credited ₦${reward.toFixed(2)} to ${refUserDoc.data().name}`);
       }
     }
 
@@ -383,7 +386,7 @@ async function markAsPaid(refId) {
 }
 
 /* -------------------
-   Totals Overview
+   Totals Overview, CSV, Filters, Settings (kept as before)
 -------------------- */
 function computeTotals() {
   const totalPartners = document.querySelectorAll("#usersTable tbody tr").length;
@@ -407,9 +410,6 @@ function computeTotals() {
   document.getElementById("pendingPayouts").textContent = `₦${pendingAmount.toFixed(2)}`;
 }
 
-/* -------------------
-   CSV Export & Misc
--------------------- */
 function tableToCSV(tableEl) {
   const rows = Array.from(tableEl.querySelectorAll("tr"));
   return rows.map(r => {
@@ -430,35 +430,28 @@ function downloadCSV(filename, content) {
   URL.revokeObjectURL(url);
 }
 
-document.getElementById("exportUsers").addEventListener("click", () => {
+document.getElementById("exportUsers")?.addEventListener("click", () => {
   const csv = tableToCSV(document.getElementById("usersTable"));
   downloadCSV("bihub_users.csv", csv);
 });
 
-document.getElementById("exportReferrals").addEventListener("click", () => {
+document.getElementById("exportReferrals")?.addEventListener("click", () => {
   const csv = tableToCSV(document.getElementById("referralsTable"));
   downloadCSV("bihub_referrals.csv", csv);
 });
 
-document.getElementById("exportAll").addEventListener("click", () => {
-  document.getElementById("exportUsers").click();
-  setTimeout(() => document.getElementById("exportReferrals").click(), 500);
+document.getElementById("exportAll")?.addEventListener("click", () => {
+  document.getElementById("exportUsers")?.click();
+  setTimeout(() => document.getElementById("exportReferrals")?.click(), 500);
 });
 
-/* -------------------
-   Filters
--------------------- */
-globalSearch.addEventListener("input", computeTotals);
-statusFilter.addEventListener("change", computeTotals);
+globalSearch?.addEventListener("input", computeTotals);
+statusFilter?.addEventListener("change", computeTotals);
 
-/* -------------------
-   Settings
--------------------- */
-document.getElementById("saveRedirect").addEventListener("click", async () => {
+document.getElementById("saveRedirect")?.addEventListener("click", async () => {
   const target = document.getElementById("redirectTarget").value.trim();
   if (!target) return alert("Enter a redirect URL.");
   try {
-    const { setDoc } = await import("https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js");
     await setDoc(doc(db, "adminSettings", "default"), { referralRedirect: target }, { merge: true });
     alert("Saved.");
   } catch (err) {
@@ -467,14 +460,11 @@ document.getElementById("saveRedirect").addEventListener("click", async () => {
   }
 });
 
-document.getElementById("clearCache").addEventListener("click", () => {
+document.getElementById("clearCache")?.addEventListener("click", () => {
   localStorage.removeItem("refCode");
   alert("Local cache cleared.");
 });
 
-/* -------------------
-   Utils
--------------------- */
 function escapeHtml(text) {
   if (!text) return "";
   return String(text)
